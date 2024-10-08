@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Site</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #003580;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        nav {
+            margin: 20px 0;
+        }
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .search-section {
+            background-color: #fff;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 30px auto;
+            width: 60%;
+        }
+        .search-section input, .search-section select, .search-section button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .recommendations, .reviews {
+            width: 80%;
+            margin: 30px auto;
+            text-align: center;
+        }
+        .recommendations h2, .reviews h2 {
+            color: #003580;
+        }
+        .recommendations .hotel, .reviews .review {
+            background-color: white;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #003580;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Best Booking Site</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Destinations</a></li>
+                <li><a href="#">Offers</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">About Us</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="search-section">
+        <h2>Find Your Perfect Hotel</h2>
+        <form action="#" method="GET">
+            <input type="text" placeholder="Destination or hotel name" name="destination">
+            <input type="date" name="check_in" placeholder="Check-in">
+            <input type="date" name="check_out" placeholder="Check-out">
+            <select name="guests">
+                <option value="1">1 Guest</option>
+                <option value="2">2 Guests</option>
+                <option value="3">3 Guests</option>
+                <option value="4">4 Guests</option>
+                <option value="5">5 Guests</option>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+    </section>
+
+    <section class="recommendations">
+        <h2>Top Hotel Recommendations</h2>
+        <div class="hotel">
+            <h3>Hotel Berlin</h3>
+            <p>Berlin, Germany | Starting from $120 per night</p>
+            <button>View Details</button>
+        </div>
+        <div class="hotel">
+            <h3>Grand Hotel Paris</h3>
+            <p>Paris, France | Starting from $150 per night</p>
+            <button>View Details</button>
+        </div>
+        <div class="hotel">
+            <h3>Luxury Resort Maldives</h3>
+            <p>Maldives | Starting from $300 per night</p>
+            <button>View Details</button>
+        </div>
+    </section>
+
+    <section class="reviews">
+        <h2>What Our Guests Say</h2>
+        <div class="review">
+            <h3>John Doe</h3>
+            <p>"Amazing experience, everything was perfect!"</p>
+        </div>
+        <div class="review">
+            <h3>Jane Smith</h3>
+            <p>"The hotel was clean, comfortable, and the staff was very friendly."</p>
+        </div>
+        <div class="review">
+            <h3>Michael Lee</h3>
+            <p>"Best vacation ever! I will definitely book again."</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Booking Site. All rights reserved.</p>
+    </footer>
+</body>
+</html>
