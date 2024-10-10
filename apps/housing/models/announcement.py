@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import CharField
+
 
 
 class Announcement(models.Model):
@@ -21,7 +21,6 @@ class Announcement(models.Model):
     ]
     is_active = models.CharField(max_length=10, choices=ACTIV_CHOICE, default='Неактивно',
                                 help_text='(поле является обязательным)', verbose_name='Статус объявления')
-    # tenant =
     class Meta:
         indexes = [
             models.Index(fields=['city', 'street', 'house']),

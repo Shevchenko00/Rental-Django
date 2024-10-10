@@ -9,10 +9,17 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
-from environ import Env
 
+from django.conf import STATICFILES_STORAGE_ALIAS
+from django.template.defaultfilters import default
+from environ import Env
+import environ
+
+# Инициализация переменных окружения
+env = environ.Env()
+environ.Env.read_env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = Env()
@@ -38,26 +45,58 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # local app(s)
     'apps.housing.apps.HousingConfig',
+    'apps.users.apps.UsersConfig',
+    'apps.reviews.apps.ReviewsConfig',
+    'apps.reservations.apps.ReservationsConfig',
     # 3rd party
     'rest_framework',
     'django_filters',
-]
+    'rest_framework_simplejwt',
+    'rest_framework.authtoken',
 
+]
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ),
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',  # Позволяет доступ всем пользователям
+    ],
+    'DEFAULT_FILTER_BACKENDS': (
+            'django_filters.rest_framework.DjangoFilterBackend',),
+}
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'apps.users.authentications.authentication_backends.EmailBackend'  # По умолчанию # Путь к кастомному бэкенду
+]
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': 'your-secret-key',  # замените на ваш ключ
+    'USER_ID_FIELD': 'id',  # имя поля с идентификатором пользователя
+    'USER_ID_CLAIM': 'user_id',  # имя поля в токене
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    # 'django_auto_logout.middleware.auto_logout',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'apps.users.middlewares.auto_jwt_token.JWTAuthenticationMiddleware',
+    # 'apps.housing.middleware.JWTAuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -65,7 +104,7 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,8 +116,10 @@ TEMPLATES = [
         },
     },
 ]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifest.StaticFilesStorage'
 
 WSGI_APPLICATION = 'config.wsgi.application'
+AUTH_USER_MODEL = 'users.User'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -86,13 +127,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 if env.bool('MYSQL', default=False):
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': env('DB_NAME'),
-            'USER': env('DB_USER'),
-            'PASSWORD': env('DB_PASSWORD'),
-            'HOST': env('DB_HOST'),
-            'PORT': env('DB_PORT'),
-        },
+            'ENGINE': ("django.db.backends.mysql"),
+            'NAME': env('DB_NAME', default='django_final_projects'),
+            'USER': env('DB_USER', default='root'),
+            'PASSWORD': env('DB_PASSWORD', default='akula123'),
+            'HOST': env('DB_HOST', default='localhost'),
+            'PORT': env('DB_PORT', default='3306'),
+        }
     }
 else:
     DATABASES = {
