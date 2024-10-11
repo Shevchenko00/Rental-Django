@@ -7,3 +7,4 @@ class ChangeActiveSerializer(ModelSerializer):
     class Meta:
         model = Announcement
         fields = ['is_active']
+        read_only_fields = ['landlord']

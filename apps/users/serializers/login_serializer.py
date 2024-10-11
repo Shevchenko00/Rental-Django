@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from apps.users.models import User
-
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -11,7 +10,7 @@ class LoginSerializer(serializers.Serializer):
         email = attrs.get('email')
         password = attrs.get('password')
 
-        # Попытка аутентификации пользователя
+
         user = authenticate(request=self.context.get('request'), email=email, password=password)
 
         if user is None:
@@ -19,3 +18,7 @@ class LoginSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+    def get_tokens(self, user):
+        refresh = RefreshToken.for_user(user)
+        return str(refresh.access_token), str(refresh)

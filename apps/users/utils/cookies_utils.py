@@ -6,7 +6,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 def set_jwt_cookies(response, user):
     refresh_token = RefreshToken.for_user(user)
     access_token = refresh_token.access_token
-    # Устанавливает JWT токены в куки.
     access_expiry = datetime.utcfromtimestamp(access_token['exp'])
     refresh_expiry = datetime.utcfromtimestamp(refresh_token['exp'])
     response.set_cookie(

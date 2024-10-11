@@ -57,18 +57,17 @@ INSTALLED_APPS = [
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',  # Позволяет доступ всем пользователям
+        'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_FILTER_BACKENDS': (
             'django_filters.rest_framework.DjangoFilterBackend',),
 }
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'apps.users.authentications.authentication_backends.EmailBackend'  # По умолчанию # Путь к кастомному бэкенду
+    'apps.users.authentications.authentication_backends.EmailBackend'
 ]
 from datetime import timedelta
 
@@ -79,9 +78,9 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
     'ALGORITHM': 'HS256',
-    'SIGNING_KEY': 'your-secret-key',  # замените на ваш ключ
-    'USER_ID_FIELD': 'id',  # имя поля с идентификатором пользователя
-    'USER_ID_CLAIM': 'user_id',  # имя поля в токене
+    'SIGNING_KEY': 'your-secret-key',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 }
 
@@ -93,10 +92,9 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'apps.users.middlewares.auto_jwt_token.JWTAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'apps.users.middlewares.auto_jwt_token.JWTAuthenticationMiddleware',
-    # 'apps.housing.middleware.JWTAuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'

@@ -1,29 +1,39 @@
-from rest_framework import generics
-from rest_framework.permissions import AllowAny
+from rest_framework import generics, permissions
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework import status
 
 from apps.users.serializers.login_serializer import LoginSerializer
 
 
 class LoginView(generics.GenericAPIView):
+    permission_classes = (permissions.AllowAny,)
     serializer_class = LoginSerializer
-    permission_classes = [AllowAny]
-
     def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        # Проверяем, что это POST-запрос и данные присутствуют
+        if request.method == 'POST':
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
 
-        # Получаем пользователя из сериализатора
-        user = serializer.validated_data['user']
+            # Получаем токены
+            access_token, refresh_token = serializer.get_tokens(serializer.validated_data['user'])
 
-        # Генерируем токен
-        token = AccessToken.for_user(user)
+            # Установка куков в ответе
+            response = Response({'message': 'Successfully logged in'}, status=status.HTTP_200_OK)
+            response.set_cookie(
+                key='access_token',
+                value=access_token,
+                httponly=True,
+                secure=False,  # Убедитесь, что это значение соответствует вашему окружению
+                samesite='Lax'
+            )
+            response.set_cookie(
+                key='refresh_token',
+                value=refresh_token,
+                httponly=True,
+                secure=False,
+                samesite='Lax'
+            )
 
-        return Response({
-            "access": str(token),
-            "user": {
-                "email": user.email,
-                "id": user.id,
-            },
-        })
+            return response
+
+        return Response({'error': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
