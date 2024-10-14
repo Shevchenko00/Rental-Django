@@ -9,21 +9,18 @@ class LoginView(generics.GenericAPIView):
     permission_classes = (permissions.AllowAny,)
     serializer_class = LoginSerializer
     def post(self, request, *args, **kwargs):
-        # Проверяем, что это POST-запрос и данные присутствуют
         if request.method == 'POST':
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
 
-            # Получаем токены
             access_token, refresh_token = serializer.get_tokens(serializer.validated_data['user'])
 
-            # Установка куков в ответе
             response = Response({'message': 'Successfully logged in'}, status=status.HTTP_200_OK)
             response.set_cookie(
                 key='access_token',
                 value=access_token,
                 httponly=True,
-                secure=False,  # Убедитесь, что это значение соответствует вашему окружению
+                secure=False,
                 samesite='Lax'
             )
             response.set_cookie(
