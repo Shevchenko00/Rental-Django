@@ -11,7 +11,14 @@ class Reservation(models.Model):
     start_date = models.DateField(verbose_name='Start date', null=False, blank=False)
     end_date = models.DateField(verbose_name='End date', null=False, blank=False)
     comment = models.TextField(verbose_name='Comment', null=True, blank=True)
+    is_canceled = models.BooleanField(default=False, verbose_name='Is canceled')  # Мягкое удаление
+    is_approved = models.BooleanField(default=False)
     class Meta:
         verbose_name = 'Reservation'
         verbose_name_plural = 'Reservations'
         unique_together = (('user', 'start_date', 'end_date'),)
+
+    def cancel(self):
+        self.is_canceled = True
+        self.save()
+
