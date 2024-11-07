@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from apps.users.serializers.register_serializer import RegisterSerializer
-from apps.users.utils.cookies_utils import set_jwt_cookies
+
 
 
 class RegisterView(CreateAPIView):
@@ -24,3 +24,4 @@ class RegisterView(CreateAPIView):
                 }
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

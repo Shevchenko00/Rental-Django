@@ -1,7 +1,7 @@
+from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, filters
-from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from apps.housing.models import Announcement
 from apps.housing.serializers.change_active import ChangeActiveSerializer
@@ -11,12 +11,10 @@ from apps.users.permissions.landlord_permissions import IsLandlordOwner
 
 
 class HousingCreateAPI(generics.CreateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(landlord=self.request.user)
 
 class HousingDetailAPI(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
@@ -40,8 +38,9 @@ class HouseChangeActiveAPI(generics.UpdateAPIView):
 
 
 class HousingSearch(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = Announcement.objects.filter(is_active="Активно")
     serializer_class = AnnouncementSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = AnnouncementFilter
+

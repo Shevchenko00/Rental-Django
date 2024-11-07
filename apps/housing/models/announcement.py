@@ -1,4 +1,6 @@
 from django.db import models
+
+
 from apps.users.models import User
 
 
@@ -23,7 +25,6 @@ class Announcement(models.Model):
                                  help_text='(поле является обязательным)', verbose_name='Статус объявления')
 
     landlord = models.ForeignKey(User, null=False, blank=False, on_delete=models.CASCADE)
-
     def save(self, *args, **kwargs):
         if not self.landlord_id:
             self.landlord = kwargs.pop('user', None)
