@@ -20,13 +20,13 @@ class User(AbstractUser, PermissionsMixin):
     )
     first_name = models.CharField(max_length=10, null=False, verbose_name='Имя')
     last_name = models.CharField(max_length=30, null=False, verbose_name='Фамилия')
-    date_birth = models.DateField(null=False, verbose_name='Дата рождения',
+    date_birth = models.DateField(null=True, verbose_name='Дата рождения',
                                    )
     email = models.EmailField(unique=True, verbose_name='Email')
     land = models.CharField(verbose_name='Федеральная земля', max_length=100, null=False, blank=True, choices=BUNDESLAENDER)
-    city = models.CharField(max_length=30, null=False, verbose_name='Город')
-    phone_code = models.CharField(max_length=30, null=False, choices=COUNTRY_CODES, verbose_name='Код вашей страны')
-    phone_number = models.IntegerField(blank=True, help_text='Введите номер телефона без учета кода',
+    city = models.CharField(max_length=30, null=True, verbose_name='Город')
+    phone_code = models.CharField(max_length=30, null=True, choices=COUNTRY_CODES, verbose_name='Код вашей страны')
+    phone_number = models.IntegerField(blank=True,null=True, help_text='Введите номер телефона без учета кода',
                              verbose_name='Номер телефона')
     is_landlord = models.BooleanField(default=False, verbose_name='Я являюсь арендодателем')
 

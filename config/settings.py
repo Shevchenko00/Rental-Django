@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
+    "drf_yasg"
 
 ]
 REST_FRAMEWORK = {
@@ -114,7 +116,7 @@ TEMPLATES = [
         },
     },
 ]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifest.StaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 WSGI_APPLICATION = 'config.wsgi.application'
 AUTH_USER_MODEL = 'users.User'
@@ -174,6 +176,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

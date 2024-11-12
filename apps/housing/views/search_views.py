@@ -14,4 +14,4 @@ class AnnouncementFilter(django_filters.FilterSet):
 
     class Meta:
         model = Announcement
-        fields = '__all__'
+        fields = ['title', 'description', 'min_price', 'max_price', 'min_rooms', 'max_rooms', 'type_of_housing', 'city', 'street']
