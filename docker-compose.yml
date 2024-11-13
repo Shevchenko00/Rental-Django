@@ -10,10 +10,9 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     ports:
-      - "3307:3306"  # Локальный порт 3307 перенаправляется на 3306 внутри контейнера
-
+      - "3307:3306"
   api:
-    image: python:3.9
+    image: python:3.12
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
