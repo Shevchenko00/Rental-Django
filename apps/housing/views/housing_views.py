@@ -11,7 +11,7 @@ from apps.users.permissions.landlord_permissions import IsLandlordOwner
 
 
 class HousingCreateAPI(generics.CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
 
